@@ -53,8 +53,9 @@ class Log
     puts JSON.pretty_unparse(codes_count)
   end
 
-  def print_methods(limit=100)
-    limit = -1 if limit <= 0
+  def print_methods(print_limit)
+    limit = print_limit ? print_limit : 100
+    limit = -1 if print_limit && print_limit <= 0
     puts "Methods requested:"
     requests_collection = Hash.new { |hash, key| hash[key] = 0 }
 
