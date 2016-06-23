@@ -1,0 +1,17 @@
+#!/usr/bin/env bundle exec ruby
+#/ Usage: <progname> [options]...
+require_relative '../lib/nginx_log_parser'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__} [options]"
+  opts.on('-f', '--file STRING', 'Mandatory nginx log file path') { |v| options[:log_file_path] = v }
+  opts.on('-l', '--limit [INTEGER]', Integer, 'Limit top-requested methods output') { |v| options[:limit] = v }
+end.parse!
+raise OptionParser::MissingArgument if options[:log_file_path].nil?
+
+log = Log.new(options[:log_file_path])
+log.parse
+log.print_codes_count
+log.print_methods(options[:limit])
+log.print_detailed_error_codes([404, 500])
